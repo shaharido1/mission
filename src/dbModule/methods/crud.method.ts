@@ -1,124 +1,127 @@
-import { ErrorHandler } from '../../logs/errorHandler';
-import { LogHandler } from '../../logs/logHandler';
+import { LogService } from "../../logs/logHandler";
 
 export class CrudMethod {
   mongoModel;
-
-  constructor(mongoModel) {
-    this.mongoModel = mongoModel
+  logService: LogService;
+  constructor(mongoModel, logService?) {
+    this.mongoModel = mongoModel;
+    this.logService = logService || {
+      log : (log) => console.log(log),
+      error : (err) => console.log(err)
+    };
   }
 
 
-  add(entityToAdd : any): Promise<any>   {
+  add(entityToAdd: any): Promise<any>   {
     return new Promise((resolve, reject) => {
       try {
         this.mongoModel.create(entityToAdd, (err, entityReturn) => {
           if (err) {
-            ErrorHandler.toConsole(err);
-            return reject(err)
+            this.logService.error(err);
+            return reject(err);
           }
           else {
-            LogHandler.saveLog("added mission: " + entityReturn.id);
-            return resolve(entityReturn)
+            this.logService.log("added mission: " + entityReturn.id);
+            return resolve(entityReturn);
           }
-        })
+        });
       }
       catch (e) {
-        ErrorHandler.toConsole(e);
-        return reject(e)
+        this.logService.error(e);
+        return reject(e);
       }
-    })
+    });
   }
 
 
-  get(entityId : any): Promise<any>  {
+  get(entityId: any): Promise<any>  {
     return new Promise((resolve, reject) => {
       try {
         this.mongoModel.findOne(entityId, (err, entityReturn) => {
           if (err) {
-            ErrorHandler.toConsole(err);
-            return reject(err)
+            this.logService.error(err);
+            return reject(err);
           }
           else {
             if (entityReturn) {
-                LogHandler.saveLog("got mission: " + entityReturn.id);
+              this.logService.log("got mission: " + entityReturn.id);
             }
             else {
-              LogHandler.saveLog("mission id:" + entityId + "doesn't exist");
-              entityReturn = {}
+              this.logService.error("mission id:" + entityId + "doesn't exist");
+              entityReturn = {};
             }
-            return resolve(entityReturn)
+            return resolve(entityReturn);
           }
-        })
+        });
       }
       catch (e) {
-        ErrorHandler.toConsole(e);
-        return reject(e)
+        this.logService.error;
+        return reject(e);
       }
-    })
+    });
   }
 
-  getAll() : Promise<any> {
+  getAll(): Promise<any> {
     return new Promise((resolve, reject) => {
       try {
         this.mongoModel.find({}, (err, entityReturn) => {
           if (err) {
-            ErrorHandler.toConsole(err);
-            return reject(err)
+            this.logService.error(err);
+            return reject(err);
           }
           else {
-            LogHandler.saveLog("got all missions");
-            return resolve(entityReturn)
+            this.logService.log("got all missions");
+            return resolve(entityReturn);
           }
-        })
+        });
       }
       catch (e) {
-        ErrorHandler.toConsole(e);
-        return reject(e)
+        this.logService.error(e);
+        return reject(e);
       }
-    })
+    });
   }
 
-  remove(entityId : any): Promise<any>  {
+  remove(entityId: any): Promise<any>  {
     return new Promise((resolve, reject) => {
       try {
         this.mongoModel.remove({_id : entityId}, (err, entityReturn) => {
           if (err) {
-            ErrorHandler.toConsole(err);
-            return reject(err)
+            this.logService.error(err);
+            return reject(err);
           }
           else {
-            LogHandler.saveLog("remove mission: " + entityReturn.id);
-            return resolve(entityReturn)
+            this.logService.log("remove mission: " + entityReturn.id);
+            return resolve(entityReturn);
           }
-        })
+        });
       }
       catch (e) {
-        ErrorHandler.toConsole(e);
-        return reject(e)
+        this.logService.error(e);
+        return reject(e);
       }
-    })
+    });
   }
 
-  update(updatedEntity : any): Promise<any>  {
+  update(updatedEntity: any): Promise<any>  {
     return new Promise((resolve, reject) => {
       try {
         this.mongoModel.findByIdAndUpdate({_id: updatedEntity._id}, updatedEntity, {new: true}, (err, entityReturn) => {
           if (err) {
-            ErrorHandler.toConsole(err);
-            return reject(err)
+            this.logService.error(err);
+            return reject(err);
           }
           else {
-            LogHandler.saveLog("update mission: " + entityReturn.id);
-            return resolve(entityReturn)
+            this.logService.log("update mission: " + entityReturn.id);
+            return resolve(entityReturn);
           }
-        })
+        });
       }
       catch (e) {
-        ErrorHandler.toConsole(e);
-        return reject(e)
+        this.logService.error(e);
+        return reject(e);
       }
-    })
+    });
   }
 
   updateField(entityId, updatedField): Promise<any>  {
@@ -126,20 +129,20 @@ export class CrudMethod {
       try {
         this.mongoModel.findByIdAndUpdate({_id: entityId}, {"$set" : updatedField}, {new: true}, (err, entityReturn) => {
           if (err) {
-            ErrorHandler.toConsole(err);
-            return reject(err)
+            this.logService.error(err);
+            return reject(err);
           }
           else {
-            LogHandler.saveLog("update mission: " + entityReturn.id);
-            return resolve(entityReturn)
+            this.logService.log("update mission: " + entityReturn.id);
+            return resolve(entityReturn);
           }
-        })
+        });
       }
       catch (e) {
-        ErrorHandler.toConsole(e);
-        return reject(e)
+        this.logService.error(e);
+        return reject(e);
       }
-    })
+    });
   }
 
   removeAll() {
@@ -147,20 +150,20 @@ export class CrudMethod {
       try {
         this.mongoModel.remove({}, (err) => {
           if (err) {
-            ErrorHandler.toConsole(err);
-            return reject(err)
+            this.logService.error(err);
+            return reject(err);
           }
           else {
-            LogHandler.saveLog("remove all: ");
-            return resolve()
+            this.logService.log("remove all: ");
+            return resolve();
           }
-        })
+        });
       }
       catch (e) {
-        ErrorHandler.toConsole(e);
-        return reject(e)
+        this.logService.error(e);
+        return reject(e);
       }
-    })
+    });
   }
 }
 

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 const missionTemplate = mongoose.Schema({
@@ -6,4 +6,4 @@ const missionTemplate = mongoose.Schema({
 });
 
 
-export const Mission = mongoose.model('mission', missionTemplate);
+export const Mission = mongoose.model("mission", missionTemplate);

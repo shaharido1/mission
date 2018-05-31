@@ -1,7 +1,7 @@
-import { CrudMethod } from './crud.method';
+import { CrudMethod } from "./crud.method";
 
 
-export class MissionMethods extends CrudMethod{
+export class MissionMethods extends CrudMethod {
 
 }
 

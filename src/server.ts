@@ -1,20 +1,21 @@
-import { routes } from './routes/routesFunction';
+import { routes } from "./routes/routesFunction";
+import { appConfig } from "./config/appConfig";
 
-const express = require('express');
+import express from "express";
+import http from "http";
+import morgan from "morgan";
+import bodyParser from "body-parser";
+import { LogService } from "./logs/logHandler";
+
 const app = express();
-const http = require('http');
 const server = http.createServer(app);
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-import { appConfig } from './config/appConfig';
 
+app.use(morgan("dev"));
+app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
+const logService = new LogService();
 
-app.use(morgan('dev'));
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
-
-
-app.set('port', appConfig.port);
+app.set("port", appConfig.port);
 routes(app);
 
 server.listen(appConfig.port, () => {
@@ -22,5 +23,14 @@ server.listen(appConfig.port, () => {
   console.log(`running on localhost:${appConfig.port}`);
 
 });
+function stop() {
+  server.close();
+}
 
-export default app;
+module.exports = {
+  stop,
+  logService,
+  server: server,
+  app: app
+};
+

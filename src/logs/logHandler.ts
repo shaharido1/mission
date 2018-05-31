@@ -1,6 +1,12 @@
-export class LogHandler {
+export class LogService {
 
-  static saveLog(log) {
-    console.log(log)
+
+
+  error(err) {
+    console.log(err)
+  }
+
+  log(log) {
+    console.log(log);
   }
 }
